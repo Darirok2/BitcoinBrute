@@ -51,12 +51,15 @@ std::string GenerateMnemonic(size_t words_count = 12) {
 	for (size_t i = 0; i < words_count; ++i)
 	{
 		size_t byte_words = 11 * i;
-		std::cout << std::endl << byte_words << " ";
+		//std::cout << std::endl << byte_words << " ";
 		if (i == words_count - 1)
 			entropy_words[i] = entropy.substr(byte_words, 7);
 		else
+			//std::cout << entropy.substr(byte_words, 11) << " ";
 			entropy_words[i] = WordsALL::WordList[BinaryToDecimal(entropy.substr(byte_words, 11))];
 		std::cout << entropy_words[i] << " " << std::endl;
 	}
+	std::cout << entropy << std::endl;
+	//std::cout << WordsALL::WordList[0] << std::endl;
 	return "OK";
 }

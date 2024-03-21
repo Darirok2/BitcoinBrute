@@ -17,11 +17,6 @@ int main()
 {
     BitconBrute btc;
     btc.Print();
-
-    std::cout << GenerateEntropy(128) << std::endl;
-    std::cout << GenerateEntropy(128) << std::endl;
-    std::cout << GenerateEntropy(128) << std::endl;
-    std::cout << GenerateEntropy(128) << std::endl;
     GenerateMnemonic(12);
 }
 
