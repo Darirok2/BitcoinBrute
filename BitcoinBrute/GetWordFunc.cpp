@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include "WordsEng.h"
-
+#include "sha256.h"
 
 size_t BinaryToDecimal(std::string binaryString) {
 	size_t decimalNumber = 0;

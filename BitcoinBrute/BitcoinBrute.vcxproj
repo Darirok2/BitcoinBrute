@@ -129,9 +129,11 @@
   <ItemGroup>
     <ClCompile Include="BitcoinBrute.cpp" />
     <ClCompile Include="GetWordFunc.cpp" />
+    <ClCompile Include="sha256.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GetWordFunc.h" />
+    <ClInclude Include="sha256.h" />
     <ClInclude Include="WordsEng.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
