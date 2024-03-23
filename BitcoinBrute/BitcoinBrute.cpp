@@ -9,7 +9,7 @@ class BitconBrute
 public:
     void Print()
     {
-        GenerateMnemonic(12);
+        //GenerateMnemonic(12);
     }
 };
 
@@ -17,7 +17,9 @@ int main()
 {
     BitconBrute btc;
     btc.Print();
-    GenerateMnemonic(12);
+    size_t words_count1 = 12;
+    size_t* word_count = &words_count1;
+    GenerateMnemonic(word_count);
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
