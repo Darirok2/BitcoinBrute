@@ -3,15 +3,26 @@
 #include <string>
 #include "WordsEng.h"
 #include "sha256.h"
-#include <bitset>
+#include <vector>
 
-void StringToChar(const std::string& entropy_str, char*& entropy) {
-	std::cout << "Entropy: ";
-	for (size_t i = 0; i < entropy_str.length(); ++i) {
-		entropy[i] = entropy_str[i];
-		std::cout << entropy[i];
+std::vector<uint8_t> to_bytes(std::string& binary_string) {
+	std::vector<uint8_t> bytes;
+	for (size_t i = 0; i < binary_string.length(); i += 8) {
+		uint8_t byte = 0;
+		for (size_t j = 0; j < 8; ++j) {
+			byte |= (binary_string[i + j] - '0') << (7 - j);
+		}
+		bytes.push_back(byte);
 	}
-	std::cout << std::endl;
+	return bytes;
+}
+
+std::string sha256_hash(const std::vector<uint8_t>& bytes) {
+	SHA256 sha256;
+	for (const auto& byte : bytes) {
+		sha256.update(&byte, 1);
+	}
+	return sha256.hash();
 }
 
 size_t BinaryToDecimal(std::string binaryString) {
@@ -24,7 +35,6 @@ size_t BinaryToDecimal(std::string binaryString) {
 		}
 		power *= 2;
 	}
-	//std::cout << "Десятичное число: " << decimalNumber << std::endl;
 
 	return decimalNumber;
 }
@@ -37,6 +47,7 @@ std::string GenerateEntropy(size_t size = 128) {
 	for (size_t i = 0; i < size; i++) {
 		entropy += std::to_string(distr(gen));
 	}
+	std::cout << "Entropy: " << entropy << std::endl;
 	return entropy;
 }
 
@@ -103,25 +114,15 @@ std::string HexToBinary(const std::string& hex) {
 	return bin;
 }
 
-std::string GetBinaryHash(std::string entropy_str) {
-	int count = entropy_str.length();
-	//std::cout << entropy_str << " " << count << std::endl;
-	char* entropy = new char[count];
+std::string GetBinaryHash(std::string& entropy_str) {
 
+	std::vector<uint8_t> bytes = to_bytes(entropy_str);
+	std::string hash = sha256_hash(bytes);
 
-	std::string byteString = "0x"+entropy_str;
-	/*std::uint32_t bytes1 = std::stoll(byteString, 0, 16);
-	std::cout << "Bytes_HEX: " << bytes1 << std::endl;*/
+	std::cout << "Hash: " << hash << std::endl;
 
-
-	StringToChar(entropy_str, entropy);
-	SHA256 buff;
-	buff.update(entropy, count);
-	std::cout << "BUFF: " << SHA256::hashString(entropy) << std::endl;
-	std::cout << "HEX SHA256: " << buff.hash() << std::endl;
-	std::string binary_entropysha256 = HexToBinary(buff.hash());
-	std::cout << "BIANRY SHA256: " << binary_entropysha256 << std::endl;
-	return binary_entropysha256;
+	std::string str = HexToBinary(hash);
+	return str;
 }
 
 std::string BinaryToStringWords(size_t *words_count) {
@@ -140,28 +141,24 @@ std::string BinaryToStringWords(size_t *words_count) {
 	default:
 		break;
 	}
+
 	std::string entropy = GenerateEntropy(size);
 	std::string entropy_words;
 	for (size_t i = 0; i < *words_count; ++i)
 	{
 		size_t byte_words = 11 * i;
-		//std::cout << std::endl << byte_words << " ";
 		if (i == *words_count - 1) {
 			std::string binary_hash = GetBinaryHash(entropy);
 			entropy_words += WordsALL::WordList[BinaryToDecimal(entropy.substr(byte_words, 7) + binary_hash[0] + binary_hash[1] + binary_hash[2] + binary_hash[3])];
 		}
 		else
-			//std::cout << entropy.substr(byte_words, 11) << " ";
 			entropy_words += WordsALL::WordList[BinaryToDecimal(entropy.substr(byte_words, 11))];
 		entropy_words += " ";
 	}
 	std::cout << entropy_words << " " << std::endl;
-	//std::cout << entropy << std::endl;
-	//std::cout << WordsALL::WordList[0] << std::endl;
-	return "OK";
+	return entropy_words;
 }
 
 std::string GenerateMnemonic(size_t *words_count) {
-	BinaryToStringWords(words_count);
-	return "OK";
+	return BinaryToStringWords(words_count);
 }

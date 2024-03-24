@@ -15,11 +15,12 @@ public:
 
 int main()
 {
-    BitconBrute btc;
-    btc.Print();
+    //BitconBrute btc;
+    //btc.Print();
     size_t words_count1 = 12;
     size_t* word_count = &words_count1;
-    GenerateMnemonic(word_count);
+    std::string mnemonic = GenerateMnemonic(word_count);
+    std::cout << mnemonic << std::endl;
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
