@@ -30,7 +30,7 @@ public:
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> distr(0, 1);
-        for (size_t i = 0; i < _entropy_size; i++) {
+        for (size_t i = 0; i < _entropy_size; ++i) {
             _entropy += std::to_string(distr(gen));
         }
         //std::cout << "Entropy: " << _entropy << std::endl;
@@ -128,7 +128,7 @@ public:
         case 128:
             for (int i = 0; i < _byte_str; ++i) {
                 _bytes[i] = 0;
-                for (int j = 0; j < 8; j++) {
+                for (int j = 0; j < 8; ++j) {
                     _bytes[i] |= (_entropy[i * 8 + j] - '0') << (7 - j);
                 }
             }
@@ -167,7 +167,7 @@ public:
     }
     std::string GetString() {
         std::string temp = _words[0];
-        for (size_t i = 1; i < _word_count; i++) {
+        for (size_t i = 1; i < _word_count; ++i) {
             temp += " ";
             temp += _words[i];
         }
@@ -181,8 +181,8 @@ public:
 int main() {
     clock_t start = clock();
     for (size_t i = 0; i < 50000; ++i) {
-        Mnemonic gen(12);
-        //std::cout << gen.GetString() << std::endl;
+        Mnemonic gen(24);
+        std::cout << gen.GetString() << std::endl;
     }
     clock_t end = clock();
     double seconds = (double)(end - start) / CLOCKS_PER_SEC;
