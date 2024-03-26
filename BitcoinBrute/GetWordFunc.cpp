@@ -47,7 +47,7 @@ std::string GenerateEntropy(size_t size = 128) {
 	for (size_t i = 0; i < size; i++) {
 		entropy += std::to_string(distr(gen));
 	}
-	std::cout << "Entropy: " << entropy << std::endl;
+	//std::cout << "Entropy: " << entropy << std::endl;
 	return entropy;
 }
 
@@ -119,7 +119,7 @@ std::string GetBinaryHash(std::string& entropy_str) {
 	std::vector<uint8_t> bytes = to_bytes(entropy_str);
 	std::string hash = sha256_hash(bytes);
 
-	std::cout << "Hash: " << hash << std::endl;
+	//std::cout << "Hash: " << hash << std::endl;
 
 	std::string str = HexToBinary(hash);
 	return str;
@@ -155,7 +155,7 @@ std::string BinaryToStringWords(size_t *words_count) {
 			entropy_words += WordsALL::WordList[BinaryToDecimal(entropy.substr(byte_words, 11))];
 		entropy_words += " ";
 	}
-	std::cout << entropy_words << " " << std::endl;
+	//std::cout << entropy_words << " " << std::endl;
 	return entropy_words;
 }
 
