@@ -1,7 +1,7 @@
 ﻿#include <ctime>
 #include <random>
 #include <string>
-#include <openssl/evp.h>
+#include "sha256.h"
 #include <iostream>
 #include "WordsEng.h"
 
@@ -121,49 +121,41 @@ public:
         return bin;
     }
     void to_sha256() {
+        clock_t start = clock();
         // 1. Convert entropy string to byte array
         _byte_str = (_entropy_size) / 8;
         _bytes = new unsigned char[_byte_str];
-        switch (_entropy_size) {
-        case 128:
-            for (int i = 0; i < _byte_str; ++i) {
-                _bytes[i] = 0;
-                for (int j = 0; j < 8; ++j) {
-                    _bytes[i] |= (_entropy[i * 8 + j] - '0') << (7 - j);
-                }
+
+        // Convert entropy to byte array
+        for (int i = 0; i < _byte_str; ++i) {
+            _bytes[i] = 0;
+            for (int j = 0; j < 8; ++j) {
+                _bytes[i] |= (_entropy[i * 8 + j] - '0') << (7 - j);
             }
-            break;
-        case 256:
-            for (int i = 0; i < _byte_str; ++i) {
-                _bytes[i] = (_entropy[i * 8] - '0') * 128;
-                _bytes[i] += (_entropy[i * 8 + 1] - '0') * 64;
-                _bytes[i] += (_entropy[i * 8 + 2] - '0') * 32;
-                _bytes[i] += (_entropy[i * 8 + 3] - '0') * 16;
-                _bytes[i] += (_entropy[i * 8 + 4] - '0') * 8;
-                _bytes[i] += (_entropy[i * 8 + 5] - '0') * 4;
-                _bytes[i] += (_entropy[i * 8 + 6] - '0') * 2;
-                _bytes[i] += (_entropy[i * 8 + 7] - '0');
-            }
-        default:
-            break;
         }
-        EVP_MD_CTX* mdctx = EVP_MD_CTX_create();
-        EVP_DigestInit(mdctx, EVP_sha256());
-        EVP_DigestUpdate(mdctx, _bytes, _byte_str);
-        unsigned char digest[EVP_MAX_MD_SIZE];
-        unsigned int digest_len;
-        EVP_DigestFinal(mdctx, digest, &digest_len);
-        EVP_MD_CTX_destroy(mdctx);
+
+        // Use sha256 functions
+        struct sha256_buff buff;
+        sha256_init(&buff);
+        sha256_update(&buff, _bytes, _byte_str);
+        sha256_finalize(&buff);
+
+        // Convert hash to string
         _sha256_str = "";
-        for (int i = 0; i < digest_len; ++i) {
+        uint8_t hash[32];
+        sha256_read(&buff, hash);
+        for (int i = 0; i < 32; ++i) {
             char hex_str[3];
-            snprintf(hex_str, sizeof(hex_str), "%02x", digest[i]);
+            snprintf(hex_str, sizeof(hex_str), "%02x", hash[i]);
             _sha256_str += hex_str;
             _sha256_binary += HexToBinary(hex_str);
         }
-        //std::cout << "SHA256: " << _sha256_str << std::endl;
-        //std::cout << "SHA256: " << _sha256_binary << std::endl;
+
+        // Clean up
         delete[] _bytes;
+        clock_t end = clock();
+        double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+        printf("The time: %f seconds\n", seconds);
     }
     std::string GetString() {
         std::string temp = _words[0];
@@ -179,13 +171,9 @@ public:
     }
 };
 int main() {
-    clock_t start = clock();
     for (size_t i = 0; i < 50000; ++i) {
-        Mnemonic gen(24);
-        std::cout << gen.GetString() << std::endl;
+        Mnemonic gen(12);
+        //std::cout << gen.GetString() << std::endl;
     }
-    clock_t end = clock();
-    double seconds = (double)(end - start) / CLOCKS_PER_SEC;
-    printf("The time: %f seconds\n", seconds);
     return 0;
 }

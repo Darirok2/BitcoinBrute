@@ -18,17 +18,11 @@
     <ClCompile Include="BitcoinBrute.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="GetWordFunc.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="sha256.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GetWordFunc.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="WordsEng.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
