@@ -26,15 +26,38 @@ public:
         to_sha256();
         BinaryToStringWords();
     }
+    //2.88
     void GenerateEntropy() {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::uniform_int_distribution<> distr(0, 1);
+        char* entropy = new char[_entropy_size];
         for (size_t i = 0; i < _entropy_size; ++i) {
-            _entropy += std::to_string(distr(gen));
+            entropy[i] = distr(gen) + '0';
         }
-        //std::cout << "Entropy: " << _entropy << std::endl;
+        _entropy = std::string(entropy);
+        free(entropy);
     }
+    //3.7
+    //void GenerateEntropy() {
+    //	std::random_device rd;
+    //	std::mt19937 gen(rd());
+    //	std::uniform_int_distribution<> distr(0, 1);
+    //	_entropy.resize(_entropy_size);
+    //	for (size_t i = 0; i < _entropy_size; ++i) {
+    //		_entropy[i] = std::to_string(distr(gen))[0];
+    //	}
+    //}
+    //4.15
+    //void GenerateEntropy() {
+    //	std::random_device rd;
+    //	std::mt19937 gen(rd());
+    //	std::uniform_int_distribution<> distr(0, 1);
+    //	for (size_t i = 0; i < _entropy_size; ++i) {
+    //		_entropy += std::to_string(distr(gen));
+    //	}
+    //	//std::cout << "Entropy: " << _entropy << std::endl;
+    //}
     size_t BinaryToDecimal(const std::string& binary) {
         size_t decimal = 0;
         size_t power = 1;
@@ -169,8 +192,8 @@ public:
 };
 int main() {
     clock_t start = clock();
-    for (size_t i = 0; i < 50000; ++i) {
-        Mnemonic gen(24);
+    for (size_t i = 0; i < 500000; ++i) {
+        Mnemonic gen(12);
         //std::cout << gen.GetString() << std::endl;
     }
     clock_t end = clock();
