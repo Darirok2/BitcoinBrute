@@ -83,66 +83,130 @@ public:
     }
     std::string HexToBinary(const std::string& hex) {
         std::string bin;
+        bin.reserve(hex.length() * 4); // Выделение памяти заранее для оптимизации
+
         for (char c : hex) {
             switch (c) {
             case '0':
-                bin += "0000";
+                bin.append("0000");
                 break;
             case '1':
-                bin += "0001";
+                bin.append("0001");
                 break;
             case '2':
-                bin += "0010";
+                bin.append("0010");
                 break;
             case '3':
-                bin += "0011";
+                bin.append("0011");
                 break;
             case '4':
-                bin += "0100";
+                bin.append("0100");
                 break;
             case '5':
-                bin += "0101";
+                bin.append("0101");
                 break;
             case '6':
-                bin += "0110";
+                bin.append("0110");
                 break;
             case '7':
-                bin += "0111";
+                bin.append("0111");
                 break;
             case '8':
-                bin += "1000";
+                bin.append("1000");
                 break;
             case '9':
-                bin += "1001";
+                bin.append("1001");
                 break;
             case 'A':
             case 'a':
-                bin += "1010";
+                bin.append("1010");
                 break;
             case 'B':
             case 'b':
-                bin += "1011";
+                bin.append("1011");
                 break;
             case 'C':
             case 'c':
-                bin += "1100";
+                bin.append("1100");
                 break;
             case 'D':
             case 'd':
-                bin += "1101";
+                bin.append("1101");
                 break;
             case 'E':
             case 'e':
-                bin += "1110";
+                bin.append("1110");
                 break;
             case 'F':
             case 'f':
-                bin += "1111";
+                bin.append("1111");
                 break;
             }
         }
         return bin;
     }
+    //std::string HexToBinary(const std::string& hex) {
+    //    std::string bin;
+    //    for (char c : hex) {
+    //        switch (c) {
+    //        case '0':
+    //            bin += "0000";
+    //            break;
+    //        case '1':
+    //            bin += "0001";
+    //            break;
+    //        case '2':
+    //            bin += "0010";
+    //            break;
+    //        case '3':
+    //            bin += "0011";
+    //            break;
+    //        case '4':
+    //            bin += "0100";
+    //            break;
+    //        case '5':
+    //            bin += "0101";
+    //            break;
+    //        case '6':
+    //            bin += "0110";
+    //            break;
+    //        case '7':
+    //            bin += "0111";
+    //            break;
+    //        case '8':
+    //            bin += "1000";
+    //            break;
+    //        case '9':
+    //            bin += "1001";
+    //            break;
+    //        case 'A':
+    //        case 'a':
+    //            bin += "1010";
+    //            break;
+    //        case 'B':
+    //        case 'b':
+    //            bin += "1011";
+    //            break;
+    //        case 'C':
+    //        case 'c':
+    //            bin += "1100";
+    //            break;
+    //        case 'D':
+    //        case 'd':
+    //            bin += "1101";
+    //            break;
+    //        case 'E':
+    //        case 'e':
+    //            bin += "1110";
+    //            break;
+    //        case 'F':
+    //        case 'f':
+    //            bin += "1111";
+    //            break;
+    //        }
+    //    }
+    //    return bin;
+    //}
     void to_sha256() {
         // 1. Convert entropy string to byte array
         _byte_str = (_entropy_size) / 8;
